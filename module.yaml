@@ -1,16 +1,14 @@
 notests *default:
   build:
-    target: Vostok.Lz4.sln
+    target: Kontur.Lz4.sln
     configuration: NoTests
     tool:
       name: dotnet
 
   install:
-    - Vostok.Lz4/bin/Release/netstandard2.0/Vostok.Lz4.dll  
+    - Kontur.Lz4/bin/Release/netstandard2.0/Vostok.Lz4.dll  
   
-full-build > notests: 
-  deps:
-    - vostok.commons.testing/src
+full-build > notests:   
   build:
-    target: Vostok.Lz4.sln
+    target: Kontur.Lz4.sln
     configuration: Release
