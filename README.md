@@ -1,3 +1,3 @@
-# Vostok.Lz4
+# Kontur.Lz4
 
-Crossplatform(x64/x86, Linux/Windows) Lz4 wrapper for C#(.Net).
+Crossplatform (linux, windows) Lz4 binary code wrapper, compatible with Milosz Krajewski lz4net.
