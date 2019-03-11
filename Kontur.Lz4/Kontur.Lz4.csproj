@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+      <AssemblyName>Kontur.Lz4</AssemblyName>
+      <RootNamespace>Kontur.Lz4</RootNamespace>
+      <Version>0.1.1</Version>
+      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+      <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+      <Authors>Kontur, Andrey Ivanov, Milosz Krajewski</Authors>
+      <Copyright></Copyright>
+      <Description>Crossplatform (linux, windows) Lz4 binary code wrapper, compatible with Milosz Krajewski lz4net.</Description>
+      <Company>Kontur</Company>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="liblz4-64.so" />
+    <None Remove="liblz4.so" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="liblz4-64.dll" />
+    <EmbeddedResource Include="liblz4-64.so" />
+    <EmbeddedResource Include="liblz4.dll" />
+    <EmbeddedResource Include="liblz4.so" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+</Project>

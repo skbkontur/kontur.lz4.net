@@ -1,0 +1,4 @@
+[submodule "original"]
+	path = original
+	url = https://github.com/lz4/lz4.git
+ tag = v1.8.3
