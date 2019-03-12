@@ -1,4 +1,5 @@
-﻿using Kontur.Lz4.Bindings;
+﻿using System;
+using Kontur.Lz4.Bindings;
 
 namespace Kontur.Lz4
 {
@@ -17,6 +18,27 @@ namespace Kontur.Lz4
         public static byte[] Decode(byte[] input, int inputOffset, int inputLength, int outputLength)
         {
             return Lz4CodecEncodeFunctions.Decode(input, inputOffset, inputLength, outputLength);
+        }
+
+        /// <summary>Decodes the specified input.</summary>
+        /// <param name="input">The input.</param>
+        /// <param name="inputOffset">The input offset.</param>
+        /// <param name="inputLength">Length of the input.</param>
+        /// <param name="output">The output.</param>
+        /// <param name="outputOffset">The output offset.</param>
+        /// <param name="outputLength">Length of the output.</param>
+        /// <param name="knownOutputLength">Set it to <c>true</c> if output length is known.</param>
+        /// <returns>Number of bytes written.</returns>
+        public static int Decode(
+            byte[] input,
+            int inputOffset,
+            int inputLength,
+            byte[] output,
+            int outputOffset,
+            int outputLength = 0,
+            bool knownOutputLength = false)
+        {
+            return Lz4CodecEncodeFunctions.Decode(input, inputOffset, inputLength, output, outputOffset, outputLength, knownOutputLength);
         }
 
         /// <summary>Encodes the specified input.</summary>

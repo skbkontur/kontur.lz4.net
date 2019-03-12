@@ -8,7 +8,10 @@ namespace Kontur.Lz4.Bindings
 
         int CompressBound(int sourceSize);
 
-        int Decompress(IntPtr source, IntPtr dest,
+        int DecompressSafe(IntPtr source, IntPtr dest,
             int compressedSize, int maxDecompressedSize);
+
+        int DecompressFast(IntPtr source, IntPtr dest,
+            int originalSize);
     }
 }

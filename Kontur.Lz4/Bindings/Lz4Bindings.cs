@@ -23,8 +23,14 @@ namespace Kontur.Lz4.Bindings
             [DllImport(DllName,
                 CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi,
                 EntryPoint = "LZ4_decompress_safe")]
-            public static extern int Decompress(IntPtr source, IntPtr dest,
+            public static extern int DecompressSafe(IntPtr source, IntPtr dest,
                 int compressedSize, int maxDecompressedSize);
+
+            [DllImport(DllName,
+                CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi,
+                EntryPoint = "LZ4_decompress_fast")]
+            public static extern int DecompressFast(IntPtr source, IntPtr dest,
+                int originalSize);
         }
 
         public int CompressDefault(IntPtr source, IntPtr dest,
@@ -39,10 +45,16 @@ namespace Kontur.Lz4.Bindings
         }
 
 
-        public int Decompress(IntPtr source, IntPtr dest,
+        public int DecompressSafe(IntPtr source, IntPtr dest,
             int compressedSize, int maxDecompressedSize)
         {
-            return Calls.Decompress(source, dest, compressedSize, maxDecompressedSize);
+            return Calls.DecompressSafe(source, dest, compressedSize, maxDecompressedSize);
+        }
+
+        public int DecompressFast(IntPtr source, IntPtr dest,
+            int originalSize)
+        {
+            return Calls.DecompressFast(source, dest, originalSize);
         }
     }
 }

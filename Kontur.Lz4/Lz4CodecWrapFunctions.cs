@@ -112,7 +112,7 @@ namespace Kontur.Lz4
                 fixed (void* inputBufferPtr = inputBuffer)
                 fixed (void* resultPtr = result)
                 {
-                    Lz4CodecEncodeFunctions.Bindings.Decompress(new IntPtr(inputBufferPtr) + inputOffset + WRAP_OFFSET_8,
+                    Lz4CodecEncodeFunctions.Bindings.DecompressSafe(new IntPtr(inputBufferPtr) + inputOffset + WRAP_OFFSET_8,
                         new IntPtr(resultPtr), inputLength, outputLength);
                 }
             }

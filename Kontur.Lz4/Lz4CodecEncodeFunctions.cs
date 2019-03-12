@@ -14,23 +14,41 @@ namespace Kontur.Lz4
         /// <param name="output">The output.</param>
         /// <param name="outputOffset">The output offset.</param>
         /// <param name="outputLength">Length of the output.</param>
+        /// <param name="knownOutputLength">Set it to <c>true</c> if output length is known.</param>
         /// <returns>Number of bytes written.</returns>
-        private static int Decode(
+        public static int Decode(
             byte[] input,
             int inputOffset,
             int inputLength,
             byte[] output,
             int outputOffset,
-            int outputLength)
+            int outputLength,
+            bool knownOutputLength)
         {
             unsafe
             {
                 fixed (void* inputPtr = input)
                 fixed (void* outputPtr = output)
                 {
-                    return Bindings.Decompress(new IntPtr(inputPtr) + inputOffset, new IntPtr(outputPtr) + outputOffset,
-                        inputLength,
-                        outputLength);
+                    if (knownOutputLength)
+                    {
+                        int length = Bindings.DecompressFast(new IntPtr(inputPtr) + inputOffset,
+                            new IntPtr(outputPtr) + outputOffset,
+                            outputLength);
+                        if (length != inputLength)
+                            throw new ArgumentException("LZ4 block is corrupted, or invalid length has been given.");
+                        return outputLength;
+                    }
+                    else
+                    {
+                        int length = Bindings.DecompressSafe(new IntPtr(inputPtr) + inputOffset,
+                            new IntPtr(outputPtr) + outputOffset,
+                            inputLength,
+                            outputLength);
+                        if (length < 0)
+                            throw new ArgumentException("LZ4 block is corrupted, or invalid length has been given.");
+                        return length;
+                    }
                 }
             }
         }
@@ -50,7 +68,7 @@ namespace Kontur.Lz4
             if (inputOffset < 0 || inputOffset + inputLength > input.Length)
                 throw new ArgumentException("inputOffset and inputLength are invalid for given input");
             var result = new byte[outputLength];
-            var length = Decode(input, inputOffset, inputLength, result, 0, outputLength);
+            var length = Decode(input, inputOffset, inputLength, result, 0, outputLength, false);
             if (length != outputLength)
                 throw new ArgumentException("outputLength is not valid");
             return result;

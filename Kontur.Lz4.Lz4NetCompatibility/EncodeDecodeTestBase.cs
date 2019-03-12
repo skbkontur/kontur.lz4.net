@@ -42,6 +42,58 @@ namespace Kontur.Lz4.Tests.Lz4NetCompatibility
             }
         }
 
+
+
+        [Combinatorial()]
+        [Test]
+        public void TestEncodeDecodeOnFileFragments_WithExistingBuffer(
+           [Values(@"Samples\EngText.txt", @"Samples\RusText.txt")]
+            string fileName, [Values(0, 9)] int offsetEncode, [Values(0, 5)] int offsetDecode,
+           [Values(0, 7)] int offsetInDecodedBuffer,
+
+           [Values(true, false)] bool knownOutputSize)
+        {
+            var rand = new Random();
+            using (var file = File.Open(Path.Combine(TestContext.CurrentContext.TestDirectory, fileName), FileMode.Open, FileAccess.Read))
+            {
+                for (var i = 0; i < 100; i++)
+                {
+                    var maxSize = file.Length;
+                    var offsetLength = rand.Next((int)maxSize * 3 / 4);
+                    file.Seek(offsetLength, SeekOrigin.Begin);
+                    var original = new byte[rand.Next(100, (int)maxSize - offsetLength)];
+                    file.Read(original, 0, original.Length);
+                    file.Seek(0, SeekOrigin.Begin);
+                    var lengthForEncodeInput = original.Length - offsetEncode;
+                    var encoded = Encode(original, offsetEncode, lengthForEncodeInput);
+                    if (offsetDecode > 0) encoded = EnlargeArray(encoded, offsetDecode);
+
+                    var decoded = new byte[lengthForEncodeInput + offsetInDecodedBuffer];
+                    Decode(encoded, offsetDecode, encoded.Length - offsetDecode, decoded, offsetInDecodedBuffer,
+                            lengthForEncodeInput, knownOutputSize)
+                        .Should().BeGreaterThan(0);
+
+                    var decodedTrash = new byte[lengthForEncodeInput + offsetInDecodedBuffer - 1];
+
+                    Assert.Throws<ArgumentException>(() =>
+                        LZ4Codec.Decode(encoded, offsetDecode, encoded.Length - offsetDecode, decodedTrash, offsetInDecodedBuffer,
+                            lengthForEncodeInput - 1, knownOutputSize));
+
+                    decoded.Skip(offsetInDecodedBuffer).SequenceEqual(original.Skip(offsetEncode)).Should().BeTrue();
+                }
+            }
+        }
+
+        protected abstract int Decode(
+            byte[] input,
+            int inputOffset,
+            int inputLength,
+            byte[] output,
+            int outputOffset,
+            int outputLength = 0,
+            bool knownOutputLength = false);
+
+
         protected abstract byte[] Decode(byte[] encoded, int offsetDecode, int i, int lengthForEncodeInput);
 
         [TestCase(0, 3)]
@@ -71,6 +123,5 @@ namespace Kontur.Lz4.Tests.Lz4NetCompatibility
         }
 
         protected abstract byte[] Encode(byte[] original, int offsetEncode, int lengthForEncodeInput);
-
     }
 }
