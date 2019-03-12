@@ -12,6 +12,7 @@
       <Copyright></Copyright>
       <Description>Crossplatform (linux, windows) Lz4 binary code wrapper, compatible with Milosz Krajewski lz4net.</Description>
       <Company>Kontur</Company>
+      <PackageLicenseUrl>https://github.com/andrew-iv/kontur.lz4/blob/master/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
