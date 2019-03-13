@@ -70,7 +70,7 @@ namespace Kontur.Lz4
         /// <exception cref="System.ArgumentException">
         ///     inputBuffer size is invalid or inputBuffer size is invalid or has been corrupted
         /// </exception>
-        public static unsafe byte[] Unwrap(byte[] inputBuffer, int inputOffset = 0)
+        public static byte[] Unwrap(byte[] inputBuffer, int inputOffset = 0)
         {
             return Lz4CodecWrapFunctions.Unwrap(inputBuffer, inputOffset);
         }
