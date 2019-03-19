@@ -20,6 +20,8 @@ namespace Kontur.Lz4
             return Lz4CodecEncodeFunctions.Decode(input, inputOffset, inputLength, outputLength);
         }
 
+
+
         /// <summary>Decodes the specified input.</summary>
         /// <param name="input">The input.</param>
         /// <param name="inputOffset">The input offset.</param>
@@ -49,6 +51,26 @@ namespace Kontur.Lz4
         public static byte[] Encode(byte[] input, int inputOffset, int inputLength)
         {
             return Lz4CodecEncodeFunctions.Encode(input, inputOffset, inputLength);
+        }
+
+
+        /// <summary>Encodes the specified input.</summary>
+        /// <param name="input">The input.</param>
+        /// <param name="inputOffset">The input offset.</param>
+        /// <param name="inputLength">Length of the input.</param>
+        /// <param name="output">The output.</param>
+        /// <param name="outputOffset">The output offset.</param>
+        /// <param name="outputLength">Length of the output.</param>
+        /// <returns>Number of bytes written.</returns>
+        public static int Encode(
+            byte[] input,
+            int inputOffset,
+            int inputLength,
+            byte[] output,
+            int outputOffset,
+            int outputLength)
+        {
+            return Lz4CodecEncodeFunctions.Encode(input, inputOffset, inputLength, output, outputOffset, outputLength);
         }
 
 

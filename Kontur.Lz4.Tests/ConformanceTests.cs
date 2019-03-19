@@ -48,13 +48,61 @@ namespace Kontur.Lz4.Tests
             }
         }
 
+
+        [TestCase(@"Samples/EngText.txt", 0, 0)]
+        [TestCase(@"Samples/RusText.txt", 0, 0)]
+        [TestCase(@"Samples/EngText.txt", 9, 0)]
+        [TestCase(@"Samples/RusText.txt", 9, 0)]
+        [TestCase(@"Samples/EngText.txt", 0, 5)]
+        [TestCase(@"Samples/EngText.txt", 6, 5)]
+        [TestCase(@"Samples/RusText.txt", 0, 6)]
+        public void TestEncodeDecodeOnFileFragments_WithExistingDecodeBuffer(string fileName, int offsetEncode,
+            int offsetDecode)
+        {
+            var rand = new Random();
+            using (var file = File.Open(fileName, FileMode.Open, FileAccess.Read))
+            {
+                for (var i = 0; i < 100; i++)
+                {
+                    var outputOffset = rand.Next(100);
+                    var maxSize = file.Length;
+                    var offsetLength = rand.Next((int) maxSize * 3 / 4);
+                    file.Seek(offsetLength, SeekOrigin.Begin);
+                    var original = new byte[rand.Next(100, (int) maxSize - offsetLength)];
+                    file.Read(original, 0, original.Length);
+                    file.Seek(0, SeekOrigin.Begin);
+                    var lengthForEncodeInput = original.Length - offsetEncode;
+                    var encoded = new byte[original.Length + 2000];
+
+                    var encodedTrash = new byte[20];
+
+                    var encodedLength = LZ4Codec.Encode(original, offsetEncode, lengthForEncodeInput,
+                        encoded, outputOffset, encoded.Length - outputOffset);
+
+                    if (offsetDecode > 0) encoded = EnlargeArray(encoded, offsetDecode);
+
+                    //Assert for trash
+                    LZ4Codec.Encode(original, offsetEncode, lengthForEncodeInput,
+                        encodedTrash, 2, 18).Should().BeLessOrEqualTo(0);
+
+                    var decoded = LZ4Codec.Decode(encoded, offsetDecode + outputOffset, encodedLength ,
+                        lengthForEncodeInput);
+
+                    Assert.Throws<ArgumentException>(() =>
+                        LZ4Codec.Decode(encoded, offsetDecode, encoded.Length - offsetDecode,
+                            lengthForEncodeInput - 1));
+
+                    decoded.SequenceEqual(original.Skip(offsetEncode)).Should().BeTrue();
+                }
+            }
+        }
+
         [Combinatorial()]
         [Test]
         public void TestEncodeDecodeOnFileFragments_WithExistingBuffer(
             [Values(@"Samples/EngText.txt", @"Samples/RusText.txt")]
             string fileName, [Values(0, 9)] int offsetEncode, [Values(0, 5)] int offsetDecode,
             [Values(0, 7)] int offsetInDecodedBuffer,
-
             [Values(true, false)] bool knownOutputSize)
         {
             var rand = new Random();
@@ -73,14 +121,16 @@ namespace Kontur.Lz4.Tests
                     if (offsetDecode > 0) encoded = EnlargeArray(encoded, offsetDecode);
 
                     var decoded = new byte[lengthForEncodeInput + offsetInDecodedBuffer];
-                    LZ4Codec.Decode(encoded, offsetDecode, encoded.Length - offsetDecode, decoded, offsetInDecodedBuffer,
+                    LZ4Codec.Decode(encoded, offsetDecode, encoded.Length - offsetDecode, decoded,
+                            offsetInDecodedBuffer,
                             lengthForEncodeInput, knownOutputSize)
                         .Should().BeGreaterThan(0);
 
                     var decodedTrash = new byte[lengthForEncodeInput + offsetInDecodedBuffer - 1];
 
                     Assert.Throws<ArgumentException>(() =>
-                        LZ4Codec.Decode(encoded, offsetDecode, encoded.Length - offsetDecode, decodedTrash, offsetInDecodedBuffer,
+                        LZ4Codec.Decode(encoded, offsetDecode, encoded.Length - offsetDecode, decodedTrash,
+                            offsetInDecodedBuffer,
                             lengthForEncodeInput - 1, knownOutputSize));
 
                     decoded.Skip(offsetInDecodedBuffer).SequenceEqual(original.Skip(offsetEncode)).Should().BeTrue();

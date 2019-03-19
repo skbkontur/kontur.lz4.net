@@ -74,7 +74,34 @@ namespace Kontur.Lz4
             return result;
         }
 
-        public static unsafe byte[] Encode(byte[] input, int inputOffset, int inputLength)
+
+        /// <summary>Encodes the specified input.</summary>
+        /// <param name="input">The input.</param>
+        /// <param name="inputOffset">The input offset.</param>
+        /// <param name="inputLength">Length of the input.</param>
+        /// <param name="output">The output.</param>
+        /// <param name="outputOffset">The output offset.</param>
+        /// <param name="outputLength">Length of the output.</param>
+        /// <returns>Number of bytes written.</returns>
+        public static unsafe int Encode(
+            byte[] input,
+            int inputOffset,
+            int inputLength,
+            byte[] output,
+            int outputOffset,
+            int outputLength)
+        {
+            fixed (void* inputPtr = input)
+            fixed (void* resultPtr = output)
+            {
+                return Bindings.CompressDefault(
+                    new IntPtr(inputPtr) + inputOffset, new IntPtr(resultPtr) + outputOffset, inputLength,
+                    outputLength);
+            }
+        }
+
+
+        public static byte[] Encode(byte[] input, int inputOffset, int inputLength)
         {
             if (inputLength < 0)
                 inputLength = input.Length - inputOffset;
@@ -83,13 +110,7 @@ namespace Kontur.Lz4
             if (inputOffset < 0 || inputOffset + inputLength > input.Length)
                 throw new ArgumentException("inputOffset and inputLength are invalid for given input");
             var result = new byte[Bindings.CompressBound(inputLength)];
-            int length;
-            fixed (void* inputPtr = input)
-            fixed (void* resultPtr = result)
-            {
-                length = Bindings.CompressDefault(
-                    new IntPtr(inputPtr) + inputOffset, new IntPtr(resultPtr), inputLength, result.Length);
-            }
+            int length = Encode(input, inputOffset, inputLength, result, 0, result.Length);
 
             if (length != result.Length)
             {
