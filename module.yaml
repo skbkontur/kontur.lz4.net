@@ -6,7 +6,7 @@ notests *default:
       name: dotnet
 
   install:
-    - Kontur.Lz4/bin/Release/netstandard2.0/Vostok.Lz4.dll  
+    - Kontur.Lz4/bin/Release/netstandard2.0/Kontur.Lz4.dll  
   
 full-build > notests:   
   build:
