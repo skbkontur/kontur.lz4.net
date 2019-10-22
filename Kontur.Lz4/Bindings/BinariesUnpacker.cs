@@ -1,26 +1,42 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 
 namespace Kontur.Lz4.Bindings
 {
     internal static class BinariesUnpacker
     {
-        public static void UnpackAssemblyFromResource(string library, string outputFile)
+        public static string UnpackAssemblyFromResource(string library, string outputFile)
         {
-            var assembly = Assembly.GetExecutingAssembly();
+            var assembly = typeof(BinariesUnpacker).Assembly;
             var resourceName = $"{nameof(Kontur)}.{nameof(Lz4)}." + library;
 
-            using (var input = assembly.GetManifestResourceStream(resourceName))
-            {
-                if (input == null)
-                    throw new InvalidOperationException($"Resource with name '{resourceName}' was not found.");
-                using (var outStream = File.Open(outputFile, FileMode.OpenOrCreate))
-                {
-                    input.CopyTo(outStream);
 
+            var expectedBinaryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, outputFile);
+            try
+            {
+                File.Delete(expectedBinaryPath);
+            }
+            catch (IOException)
+            {
+            }
+            catch (UnauthorizedAccessException)
+            {
+            }
+
+            if (File.Exists(expectedBinaryPath))
+                return expectedBinaryPath;
+            using (var resourceStream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (resourceStream == null)
+                    throw new NotSupportedException($"Resource '{resourceName}' is missing");
+                using (var resultStream = new FileStream(expectedBinaryPath, FileMode.Create, FileAccess.ReadWrite,
+                    FileShare.Read))
+                {
+                    resourceStream.CopyTo(resultStream);
                 }
             }
+
+            return expectedBinaryPath;
         }
     }
 }

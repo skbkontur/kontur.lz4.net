@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
 
 namespace Kontur.Lz4.Bindings
 {
@@ -13,22 +15,32 @@ namespace Kontur.Lz4.Bindings
 
         private static ILz4Bindings GetBinding(PlatformID platformId, bool is64Bit)
         {
+            string dllPath;
+
             switch (platformId)
             {
                 case PlatformID.Win32NT:
                 case PlatformID.Win32Windows:
-                    BinariesUnpacker.UnpackAssemblyFromResource(is64Bit ? "liblz4-64.dll" : "liblz4.dll",
+                    dllPath = BinariesUnpacker.UnpackAssemblyFromResource(is64Bit ? "liblz4-64.dll" : "liblz4.dll",
                         Lz4Bindings.DllName + ".dll");
+                    var libHandle = LoadLibraryW(dllPath);
+                    if (libHandle == IntPtr.Zero)
+                    {
+                        var lastWin32Error = Marshal.GetLastWin32Error();
+                        throw new Win32Exception($"Failed with code {lastWin32Error}. x64={IntPtr.Size == 8}", new Win32Exception(lastWin32Error));
+                    }
                     return new Lz4Bindings();
                 case PlatformID.Unix:
-                    var libraryFile = "./lib" + Lz4Bindings.DllName + ".so";
-                    BinariesUnpacker.UnpackAssemblyFromResource(is64Bit ? "liblz4-64.so" : "liblz4.so",
-                        libraryFile);
-                    UnixFilePermisiionHelper.Set755(libraryFile);
+                    dllPath = BinariesUnpacker.UnpackAssemblyFromResource(is64Bit ? "liblz4-64.so" : "liblz4.so",
+                        "./lib" + Lz4Bindings.DllName + ".so");
+                    UnixFilePermisiionHelper.Set755(dllPath);
                     return new Lz4Bindings();
                 default:
                     throw new InvalidOperationException($"{platformId} is not supported");
             }
         }
+
+        [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
+        private static extern IntPtr LoadLibraryW(string lpFileName);
     }
 }
