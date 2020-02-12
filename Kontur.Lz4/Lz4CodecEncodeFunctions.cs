@@ -123,5 +123,10 @@ namespace Kontur.Lz4
 
             return result;
         }
+
+        public static int CompressBound(int sourceSize)
+        {
+            return Bindings.CompressBound(sourceSize);
+        }
     }
 }

@@ -21,7 +21,6 @@ namespace Kontur.Lz4
         }
 
 
-
         /// <summary>Decodes the specified input.</summary>
         /// <param name="input">The input.</param>
         /// <param name="inputOffset">The input offset.</param>
@@ -95,6 +94,14 @@ namespace Kontur.Lz4
         public static byte[] Unwrap(byte[] inputBuffer, int inputOffset = 0)
         {
             return Lz4CodecWrapFunctions.Unwrap(inputBuffer, inputOffset);
+        }
+
+        /// <summary>
+        /// Returns maximum length of compressed data.
+        /// </summary>
+        public static int CompressBound(int sourceSize)
+        {
+            return Lz4CodecEncodeFunctions.CompressBound(sourceSize);
         }
     }
 }

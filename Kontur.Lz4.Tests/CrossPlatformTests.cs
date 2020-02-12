@@ -9,24 +9,30 @@ namespace Kontur.Lz4.Tests
     [TestFixture]
     public class CrossPlatformTests
     {
-        private static byte[] _originalBytes = Encoding.ASCII.GetBytes("abracadabracodabraabracadabracodaabracada bra");
+        private static readonly byte[] _originalBytes = Encoding.ASCII.GetBytes("abracadabracodabraabracadabracodaabracada bra");
 
-        private static byte[] _encodedOriginal =
+        private static readonly byte[] _encodedOriginal =
             Convert.FromBase64String("cWFicmFjYWQHABFvBwABCwAGEgADDwBQYSBicmE=");
 
-        
+
         [Test]
         public void DecodeSampleFromOriginal()
         {
             var decoded = LZ4Codec.Decode(_encodedOriginal, 0, _encodedOriginal.Length, _originalBytes.Length);
             decoded.SequenceEqual(_originalBytes).Should().BeTrue();
         }
-        
+
         [Test]
         public void EncodeIsStable()
         {
             var encoded = LZ4Codec.Encode(_originalBytes, 0, _originalBytes.Length);
             encoded.SequenceEqual(_encodedOriginal).Should().BeTrue();
+        }
+
+        [Test]
+        public void CompressBound_should_works()
+        {
+            LZ4Codec.CompressBound(42).Should().Be(58);
         }
     }
 }
