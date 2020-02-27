@@ -5,7 +5,7 @@
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
       <AssemblyName>Kontur.Lz4</AssemblyName>
       <RootNamespace>Kontur.Lz4</RootNamespace>
-      <Version>0.1.8-pre000001</Version>
+      <Version>0.1.8-pre000002</Version>
       <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
       <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
       <Authors>Kontur, Andrey Ivanov, Milosz Krajewski</Authors>

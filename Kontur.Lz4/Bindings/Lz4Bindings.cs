@@ -5,7 +5,8 @@ namespace Kontur.Lz4.Bindings
 {
     internal class Lz4Bindings : ILz4Bindings
     {
-        public const string DllName = "Kontur_Lz4_original";
+        // Note(kungurtsev): up version on update.
+        public const string DllName = "Kontur_Lz4_original_v1";
 
         private static class Calls
         {
