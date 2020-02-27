@@ -8,9 +8,26 @@ namespace Kontur.Lz4.Bindings
     {
         public static ILz4Bindings GetBinding()
         {
-            bool is64Bit = Environment.Is64BitProcess;
+            var is64Bit = Environment.Is64BitProcess;
             var platformId = Environment.OSVersion.Platform;
-            return GetBinding(platformId, is64Bit);
+
+            Exception error = null;
+            
+            for (var attempt = 0; attempt < 5; attempt++)
+            {
+                try
+                {
+                    var binging = GetBinding(platformId, is64Bit);
+                    binging.CompressBound(42);
+                    return binging;
+                }
+                catch (Exception e)
+                {
+                    error = e;
+                }
+            }
+
+            throw error ?? new Exception("No attempts were made.");
         }
 
         private static ILz4Bindings GetBinding(PlatformID platformId, bool is64Bit)

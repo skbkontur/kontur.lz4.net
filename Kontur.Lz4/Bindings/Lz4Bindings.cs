@@ -16,7 +16,8 @@ namespace Kontur.Lz4.Bindings
                 int sourceSize, int maxDestSize);
 
             [DllImport(DllName,
-                CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "LZ4_compressBound")]
+                CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, 
+                EntryPoint = "LZ4_compressBound")]
             public static extern int CompressBound(int sourceSize);
 
 
