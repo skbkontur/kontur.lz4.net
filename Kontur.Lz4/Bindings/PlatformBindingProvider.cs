@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Kontur.Lz4.Bindings
 {
@@ -13,7 +14,7 @@ namespace Kontur.Lz4.Bindings
 
             Exception error = null;
             
-            for (var attempt = 0; attempt < 5; attempt++)
+            for (var attempt = 0; attempt < 10; attempt++)
             {
                 try
                 {
@@ -24,6 +25,7 @@ namespace Kontur.Lz4.Bindings
                 catch (Exception e)
                 {
                     error = e;
+                    Thread.Sleep(50);
                 }
             }
 

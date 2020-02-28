@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 
 namespace Kontur.Lz4.Bindings
@@ -7,25 +8,41 @@ namespace Kontur.Lz4.Bindings
     {
         public static string UnpackAssemblyFromResource(string library, string outputFile)
         {
-            var assembly = typeof(BinariesUnpacker).Assembly;
             var resourceName = $"{nameof(Kontur)}.{nameof(Lz4)}." + library;
 
             var expectedBinaryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, outputFile);
 
-            if (File.Exists(expectedBinaryPath))
+            var resource = GetResource(resourceName);
+
+            if (File.Exists(expectedBinaryPath) && ByteArraysEquals(File.ReadAllBytes(expectedBinaryPath), resource))
                 return expectedBinaryPath;
+
+            File.WriteAllBytes(expectedBinaryPath, resource);
+
+            return expectedBinaryPath;
+        }
+
+        private static byte[] GetResource(string resourceName)
+        {
+            var assembly = typeof(BinariesUnpacker).Assembly;
 
             using (var resourceStream = assembly.GetManifestResourceStream(resourceName))
             {
                 if (resourceStream == null)
                     throw new NotSupportedException($"Resource '{resourceName}' is missing");
-                using (var resultStream = new FileStream(expectedBinaryPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
+
+                using (var memoryStream = new MemoryStream())
                 {
-                    resourceStream.CopyTo(resultStream);
+                    resourceStream.CopyTo(memoryStream);
+
+                    return memoryStream.ToArray();
                 }
             }
+        }
 
-            return expectedBinaryPath;
+        private static bool ByteArraysEquals(byte[] a1, byte[] a2)
+        {
+            return StructuralComparisons.StructuralEqualityComparer.Equals(a1, a2);
         }
     }
 }
