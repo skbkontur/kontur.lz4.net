@@ -6,7 +6,7 @@ namespace Kontur.Lz4.Bindings
 {
     internal static class BinariesUnpacker
     {
-        public static string UnpackAssemblyFromResource(string library, string outputFile)
+        public static (string path, bool created) UnpackAssemblyFromResource(string library, string outputFile)
         {
             var resourceName = $"{nameof(Kontur)}.{nameof(Lz4)}." + library;
 
@@ -15,11 +15,11 @@ namespace Kontur.Lz4.Bindings
             var resource = GetResource(resourceName);
 
             if (File.Exists(expectedBinaryPath) && ByteArraysEquals(File.ReadAllBytes(expectedBinaryPath), resource))
-                return expectedBinaryPath;
+                return (expectedBinaryPath, false);
 
             File.WriteAllBytes(expectedBinaryPath, resource);
 
-            return expectedBinaryPath;
+            return (expectedBinaryPath, true);
         }
 
         private static byte[] GetResource(string resourceName)

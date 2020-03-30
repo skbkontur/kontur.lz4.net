@@ -40,7 +40,7 @@ namespace Kontur.Lz4.Bindings
             {
                 case PlatformID.Win32NT:
                 case PlatformID.Win32Windows:
-                    dllPath = BinariesUnpacker.UnpackAssemblyFromResource(is64Bit ? "liblz4-64.dll" : "liblz4.dll",
+                    (dllPath, _) = BinariesUnpacker.UnpackAssemblyFromResource(is64Bit ? "liblz4-64.dll" : "liblz4.dll",
                         Lz4Bindings.DllName + ".dll");
                     var libHandle = LoadLibraryW(dllPath);
                     if (libHandle == IntPtr.Zero)
@@ -50,9 +50,12 @@ namespace Kontur.Lz4.Bindings
                     }
                     return new Lz4Bindings();
                 case PlatformID.Unix:
-                    dllPath = BinariesUnpacker.UnpackAssemblyFromResource(is64Bit ? "liblz4-64.so" : "liblz4.so",
+                    bool created;
+                    (dllPath, created) = BinariesUnpacker.UnpackAssemblyFromResource(is64Bit ? "liblz4-64.so" : "liblz4.so",
                         "./lib" + Lz4Bindings.DllName + ".so");
-                    UnixFilePermisiionHelper.Set755(dllPath);
+                    var error = UnixFilePermissionHelper.TrySet755(dllPath);
+                    if (created && error != null)
+                        throw error;
                     return new Lz4Bindings();
                 default:
                     throw new InvalidOperationException($"{platformId} is not supported");
