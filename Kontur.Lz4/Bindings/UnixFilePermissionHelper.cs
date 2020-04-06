@@ -8,7 +8,6 @@ namespace Kontur.Lz4.Bindings
         [DllImport("libc", SetLastError = true)]
         private static extern int chmod(string pathname, UnixPermissions mode);
 
-
         public static Exception TrySet755(string fileName)
         {
             var setPermissions = UnixPermissions.S_IRUSR | UnixPermissions.S_IXUSR | UnixPermissions.S_IWUSR

@@ -8,9 +8,9 @@ namespace Kontur.Lz4.Bindings
 {
     internal static class BinariesUnpacker
     {
-        public static (string path, bool created) UnpackAssemblyFromResource(string library, bool is64Bit, string outputFile)
+        public static (string path, bool created) UnpackAssemblyFromResource(string library, string outputFile)
         {
-            var directory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), is64Bit ? "x64" : "x86");
+            var directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var expectedBinaryPath = Path.Combine(directory, outputFile);
 
             var resourceName = $"{nameof(Kontur)}.{nameof(Lz4)}." + library;

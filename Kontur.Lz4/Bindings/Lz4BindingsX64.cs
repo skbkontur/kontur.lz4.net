@@ -3,10 +3,9 @@ using System.Runtime.InteropServices;
 
 namespace Kontur.Lz4.Bindings
 {
-    internal class Lz4Bindings : ILz4Bindings
+    internal class Lz4BindingsX64 : ILz4Bindings
     {
-        // Note(kungurtsev): up version on update.
-        public const string DllName = "Kontur_Lz4_original_v1";
+        public const string Name = "kontur_lz4_x64";
 
         public int CompressDefault(IntPtr source, IntPtr dest,
             int sourceSize, int maxDestSize)
@@ -18,7 +17,6 @@ namespace Kontur.Lz4.Bindings
         {
             return Calls.CompressBound(sourceSize);
         }
-
 
         public int DecompressSafe(IntPtr source, IntPtr dest,
             int compressedSize, int maxDecompressedSize)
@@ -34,25 +32,25 @@ namespace Kontur.Lz4.Bindings
 
         private static class Calls
         {
-            [DllImport(DllName,
+            [DllImport(Name,
                 CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi,
                 EntryPoint = "LZ4_compress_default")]
             public static extern int CompressDefault(IntPtr source, IntPtr dest,
                 int sourceSize, int maxDestSize);
 
-            [DllImport(DllName,
+            [DllImport(Name,
                 CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi,
                 EntryPoint = "LZ4_compressBound")]
             public static extern int CompressBound(int sourceSize);
 
 
-            [DllImport(DllName,
+            [DllImport(Name,
                 CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi,
                 EntryPoint = "LZ4_decompress_safe")]
             public static extern int DecompressSafe(IntPtr source, IntPtr dest,
                 int compressedSize, int maxDecompressedSize);
 
-            [DllImport(DllName,
+            [DllImport(Name,
                 CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi,
                 EntryPoint = "LZ4_decompress_fast")]
             public static extern int DecompressFast(IntPtr source, IntPtr dest,

@@ -5,7 +5,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>Kontur.Lz4</AssemblyName>
     <RootNamespace>Kontur.Lz4</RootNamespace>
-    <Version>0.1.10</Version>
+    <Version>0.1.11</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Authors>Kontur, Andrey Ivanov, Milosz Krajewski</Authors>
@@ -24,15 +24,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="build\liblz4-64.so" />
-    <None Remove="build\liblz4.so" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="build\liblz4-64.dll" Link="liblz4-64.dll" />
-    <EmbeddedResource Include="build\liblz4-64.so" Link="liblz4-64.so" />
-    <EmbeddedResource Include="build\liblz4.dll" Link="liblz4.dll" />
-    <EmbeddedResource Include="build\liblz4.so" Link="liblz4.so" />
+    <EmbeddedResource Include="build\kontur_lz4_x64.dll" Link="kontur_lz4_x64.dll" />
+    <EmbeddedResource Include="build\kontur_lz4_x64.so" Link="kontur_lz4_x64.so" />
+    <EmbeddedResource Include="build\kontur_lz4_x86.dll" Link="kontur_lz4_x86.dll" />
+    <EmbeddedResource Include="build\kontur_lz4_x86.so" Link="kontur_lz4_x86.so" />
   </ItemGroup>
 
   <ItemGroup>
