@@ -1,22 +1,25 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using System.Reflection;
+// ReSharper disable AssignNullToNotNullAttribute
 
 namespace Kontur.Lz4.Bindings
 {
     internal static class BinariesUnpacker
     {
-        public static (string path, bool created) UnpackAssemblyFromResource(string library, string outputFile)
+        public static (string path, bool created) UnpackAssemblyFromResource(string library, bool is64Bit, string outputFile)
         {
+            var directory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), is64Bit ? "x64" : "x86");
+            var expectedBinaryPath = Path.Combine(directory, outputFile);
+
             var resourceName = $"{nameof(Kontur)}.{nameof(Lz4)}." + library;
-
-            var expectedBinaryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, outputFile);
-
             var resource = GetResource(resourceName);
 
             if (File.Exists(expectedBinaryPath) && ByteArraysEquals(File.ReadAllBytes(expectedBinaryPath), resource))
                 return (expectedBinaryPath, false);
 
+            Directory.CreateDirectory(Path.GetDirectoryName(expectedBinaryPath));
             File.WriteAllBytes(expectedBinaryPath, resource);
 
             return (expectedBinaryPath, true);

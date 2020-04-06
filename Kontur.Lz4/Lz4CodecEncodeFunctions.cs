@@ -32,7 +32,7 @@ namespace Kontur.Lz4
                 {
                     if (knownOutputLength)
                     {
-                        int length = Bindings.DecompressFast(new IntPtr(inputPtr) + inputOffset,
+                        var length = Bindings.DecompressFast(new IntPtr(inputPtr) + inputOffset,
                             new IntPtr(outputPtr) + outputOffset,
                             outputLength);
                         if (length != inputLength)
@@ -41,7 +41,7 @@ namespace Kontur.Lz4
                     }
                     else
                     {
-                        int length = Bindings.DecompressSafe(new IntPtr(inputPtr) + inputOffset,
+                        var length = Bindings.DecompressSafe(new IntPtr(inputPtr) + inputOffset,
                             new IntPtr(outputPtr) + outputOffset,
                             inputLength,
                             outputLength);
@@ -110,7 +110,7 @@ namespace Kontur.Lz4
             if (inputOffset < 0 || inputOffset + inputLength > input.Length)
                 throw new ArgumentException("inputOffset and inputLength are invalid for given input");
             var result = new byte[Bindings.CompressBound(inputLength)];
-            int length = Encode(input, inputOffset, inputLength, result, 0, result.Length);
+            var length = Encode(input, inputOffset, inputLength, result, 0, result.Length);
 
             if (length != result.Length)
             {

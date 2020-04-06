@@ -1,6 +1,6 @@
 ﻿namespace Kontur.Lz4.Tests.Lz4NetCompatibility
 {
-    public class EncodeWithTheirDecodeWithMyTest: EncodeDecodeTestBase
+    public class EncodeWithTheirDecodeWithMyTest : EncodeDecodeTestBase
     {
         protected override int Decode(byte[] input, int inputOffset, int inputLength, byte[] output, int outputOffset, int outputLength = 0,
             bool knownOutputLength = false)

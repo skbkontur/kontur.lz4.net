@@ -21,18 +21,18 @@ namespace Kontur.Lz4.Tests.Lz4NetCompatibility
         public void TestEncodeDecodeOnFileFragments(string fileName, int offsetEncode, int offsetDecode)
         {
             var rand = new Random();
-            using (var file = File.Open(Path.Combine(TestContext.CurrentContext.TestDirectory,fileName), FileMode.Open, FileAccess.Read))
+            using (var file = File.Open(Path.Combine(TestContext.CurrentContext.TestDirectory, fileName), FileMode.Open, FileAccess.Read))
             {
                 for (var i = 0; i < 100; i++)
                 {
                     var maxSize = file.Length;
-                    var offsetLength = rand.Next((int)maxSize * 3 / 4);
+                    var offsetLength = rand.Next((int) maxSize * 3 / 4);
                     file.Seek(offsetLength, SeekOrigin.Begin);
-                    var original = new byte[rand.Next(100, (int)maxSize - offsetLength)];
+                    var original = new byte[rand.Next(100, (int) maxSize - offsetLength)];
                     file.Read(original, 0, original.Length);
                     file.Seek(0, SeekOrigin.Begin);
                     var lengthForEncodeInput = original.Length - offsetEncode;
-                    var encoded =  Encode(original, offsetEncode, lengthForEncodeInput);
+                    var encoded = Encode(original, offsetEncode, lengthForEncodeInput);
                     if (offsetDecode > 0) encoded = EnlargeArray(encoded, offsetDecode);
 
                     var decoded = Decode(encoded, offsetDecode, encoded.Length - offsetDecode,
@@ -43,15 +43,13 @@ namespace Kontur.Lz4.Tests.Lz4NetCompatibility
         }
 
 
-
-        [Combinatorial()]
+        [Combinatorial]
         [Test]
         public void TestEncodeDecodeOnFileFragments_WithExistingBuffer(
-           [Values(@"Samples\EngText.txt", @"Samples\RusText.txt")]
+            [Values(@"Samples\EngText.txt", @"Samples\RusText.txt")]
             string fileName, [Values(0, 9)] int offsetEncode, [Values(0, 5)] int offsetDecode,
-           [Values(0, 7)] int offsetInDecodedBuffer,
-
-           [Values(true, false)] bool knownOutputSize)
+            [Values(0, 7)] int offsetInDecodedBuffer,
+            [Values(true, false)] bool knownOutputSize)
         {
             var rand = new Random();
             using (var file = File.Open(Path.Combine(TestContext.CurrentContext.TestDirectory, fileName), FileMode.Open, FileAccess.Read))
@@ -59,9 +57,9 @@ namespace Kontur.Lz4.Tests.Lz4NetCompatibility
                 for (var i = 0; i < 100; i++)
                 {
                     var maxSize = file.Length;
-                    var offsetLength = rand.Next((int)maxSize * 3 / 4);
+                    var offsetLength = rand.Next((int) maxSize * 3 / 4);
                     file.Seek(offsetLength, SeekOrigin.Begin);
-                    var original = new byte[rand.Next(100, (int)maxSize - offsetLength)];
+                    var original = new byte[rand.Next(100, (int) maxSize - offsetLength)];
                     file.Read(original, 0, original.Length);
                     file.Seek(0, SeekOrigin.Begin);
                     var lengthForEncodeInput = original.Length - offsetEncode;

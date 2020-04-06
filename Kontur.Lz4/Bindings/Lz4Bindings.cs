@@ -8,33 +8,6 @@ namespace Kontur.Lz4.Bindings
         // Note(kungurtsev): up version on update.
         public const string DllName = "Kontur_Lz4_original_v1";
 
-        private static class Calls
-        {
-            [DllImport(DllName,
-                CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi,
-                EntryPoint = "LZ4_compress_default")]
-            public static extern int CompressDefault(IntPtr source, IntPtr dest,
-                int sourceSize, int maxDestSize);
-
-            [DllImport(DllName,
-                CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, 
-                EntryPoint = "LZ4_compressBound")]
-            public static extern int CompressBound(int sourceSize);
-
-
-            [DllImport(DllName,
-                CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi,
-                EntryPoint = "LZ4_decompress_safe")]
-            public static extern int DecompressSafe(IntPtr source, IntPtr dest,
-                int compressedSize, int maxDecompressedSize);
-
-            [DllImport(DllName,
-                CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi,
-                EntryPoint = "LZ4_decompress_fast")]
-            public static extern int DecompressFast(IntPtr source, IntPtr dest,
-                int originalSize);
-        }
-
         public int CompressDefault(IntPtr source, IntPtr dest,
             int sourceSize, int maxDestSize)
         {
@@ -57,6 +30,33 @@ namespace Kontur.Lz4.Bindings
             int originalSize)
         {
             return Calls.DecompressFast(source, dest, originalSize);
+        }
+
+        private static class Calls
+        {
+            [DllImport(DllName,
+                CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi,
+                EntryPoint = "LZ4_compress_default")]
+            public static extern int CompressDefault(IntPtr source, IntPtr dest,
+                int sourceSize, int maxDestSize);
+
+            [DllImport(DllName,
+                CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi,
+                EntryPoint = "LZ4_compressBound")]
+            public static extern int CompressBound(int sourceSize);
+
+
+            [DllImport(DllName,
+                CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi,
+                EntryPoint = "LZ4_decompress_safe")]
+            public static extern int DecompressSafe(IntPtr source, IntPtr dest,
+                int compressedSize, int maxDecompressedSize);
+
+            [DllImport(DllName,
+                CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi,
+                EntryPoint = "LZ4_decompress_fast")]
+            public static extern int DecompressFast(IntPtr source, IntPtr dest,
+                int originalSize);
         }
     }
 }

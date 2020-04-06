@@ -13,7 +13,7 @@ namespace Kontur.Lz4.Bindings
             var platformId = Environment.OSVersion.Platform;
 
             Exception error = null;
-            
+
             for (var attempt = 0; attempt < 10; attempt++)
             {
                 try
@@ -40,7 +40,9 @@ namespace Kontur.Lz4.Bindings
             {
                 case PlatformID.Win32NT:
                 case PlatformID.Win32Windows:
-                    (dllPath, _) = BinariesUnpacker.UnpackAssemblyFromResource(is64Bit ? "liblz4-64.dll" : "liblz4.dll",
+                    (dllPath, _) = BinariesUnpacker.UnpackAssemblyFromResource(
+                        is64Bit ? "liblz4-64.dll" : "liblz4.dll",
+                        is64Bit,
                         Lz4Bindings.DllName + ".dll");
                     var libHandle = LoadLibraryW(dllPath);
                     if (libHandle == IntPtr.Zero)
@@ -48,10 +50,13 @@ namespace Kontur.Lz4.Bindings
                         var lastWin32Error = Marshal.GetLastWin32Error();
                         throw new Win32Exception($"Failed with code {lastWin32Error}. x64={IntPtr.Size == 8}", new Win32Exception(lastWin32Error));
                     }
+
                     return new Lz4Bindings();
                 case PlatformID.Unix:
                     bool created;
-                    (dllPath, created) = BinariesUnpacker.UnpackAssemblyFromResource(is64Bit ? "liblz4-64.so" : "liblz4.so",
+                    (dllPath, created) = BinariesUnpacker.UnpackAssemblyFromResource(
+                        is64Bit ? "liblz4-64.so" : "liblz4.so",
+                        is64Bit,
                         "./lib" + Lz4Bindings.DllName + ".so");
                     var error = UnixFilePermissionHelper.TrySet755(dllPath);
                     if (created && error != null)

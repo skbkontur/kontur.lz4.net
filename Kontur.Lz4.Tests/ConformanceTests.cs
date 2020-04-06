@@ -85,7 +85,7 @@ namespace Kontur.Lz4.Tests
                     LZ4Codec.Encode(original, offsetEncode, lengthForEncodeInput,
                         encodedTrash, 2, 18).Should().BeLessOrEqualTo(0);
 
-                    var decoded = LZ4Codec.Decode(encoded, offsetDecode + outputOffset, encodedLength ,
+                    var decoded = LZ4Codec.Decode(encoded, offsetDecode + outputOffset, encodedLength,
                         lengthForEncodeInput);
 
                     Assert.Throws<ArgumentException>(() =>
@@ -97,7 +97,7 @@ namespace Kontur.Lz4.Tests
             }
         }
 
-        [Combinatorial()]
+        [Combinatorial]
         [Test]
         public void TestEncodeDecodeOnFileFragments_WithExistingBuffer(
             [Values(@"Samples/EngText.txt", @"Samples/RusText.txt")]

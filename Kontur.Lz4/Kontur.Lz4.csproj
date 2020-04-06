@@ -2,17 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-      <AssemblyName>Kontur.Lz4</AssemblyName>
-      <RootNamespace>Kontur.Lz4</RootNamespace>
-      <Version>0.1.9</Version>
-      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-      <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-      <Authors>Kontur, Andrey Ivanov, Milosz Krajewski</Authors>
-      <Copyright></Copyright>
-      <Description>Crossplatform (linux, windows) Lz4 binary code wrapper, compatible with Milosz Krajewski lz4net.</Description>
-      <Company>Kontur</Company>
-      <PackageLicenseUrl>https://github.com/andrew-iv/kontur.lz4/blob/master/LICENSE</PackageLicenseUrl>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AssemblyName>Kontur.Lz4</AssemblyName>
+    <RootNamespace>Kontur.Lz4</RootNamespace>
+    <Version>0.1.10</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Authors>Kontur, Andrey Ivanov, Milosz Krajewski</Authors>
+    <Copyright></Copyright>
+    <Description>Crossplatform (linux, windows) Lz4 binary code wrapper, compatible with Milosz Krajewski lz4net.</Description>
+    <Company>Kontur</Company>
+    <PackageLicenseUrl>https://github.com/andrew-iv/kontur.lz4/blob/master/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -24,19 +24,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="liblz4-64.so" />
-    <None Remove="liblz4.so" />
+    <None Remove="build\liblz4-64.so" />
+    <None Remove="build\liblz4.so" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="liblz4-64.dll" />
-    <EmbeddedResource Include="liblz4-64.so" />
-    <EmbeddedResource Include="liblz4.dll" />
-    <EmbeddedResource Include="liblz4.so" />
+    <EmbeddedResource Include="build\liblz4-64.dll" Link="liblz4-64.dll" />
+    <EmbeddedResource Include="build\liblz4-64.so" Link="liblz4-64.so" />
+    <EmbeddedResource Include="build\liblz4.dll" Link="liblz4.dll" />
+    <EmbeddedResource Include="build\liblz4.so" Link="liblz4.so" />
   </ItemGroup>
 
   <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+    <None Include="build\**\*" Pack="true" PackagePath="build\" />
   </ItemGroup>
 
 </Project>

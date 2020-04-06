@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="Copy Lz4 native libraries" AfterTargets="Build">
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)liblz4.dll"
+          DestinationFiles="$(ProjectDir)$(OutputPath)x86\Kontur_Lz4_original_v1.dll"
+          ContinueOnError="true" />
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)liblz4-64.dll"
+          DestinationFiles="$(ProjectDir)$(OutputPath)x64\Kontur_Lz4_original_v1.dll"
+          ContinueOnError="true" />
+  </Target>
+</Project>
