@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using System.Reflection;
+// ReSharper disable AssignNullToNotNullAttribute
 
 namespace Kontur.Lz4.Bindings
 {
@@ -8,15 +10,16 @@ namespace Kontur.Lz4.Bindings
     {
         public static (string path, bool created) UnpackAssemblyFromResource(string library, string outputFile)
         {
+            var directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var expectedBinaryPath = Path.Combine(directory, outputFile);
+
             var resourceName = $"{nameof(Kontur)}.{nameof(Lz4)}." + library;
-
-            var expectedBinaryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, outputFile);
-
             var resource = GetResource(resourceName);
 
             if (File.Exists(expectedBinaryPath) && ByteArraysEquals(File.ReadAllBytes(expectedBinaryPath), resource))
                 return (expectedBinaryPath, false);
 
+            Directory.CreateDirectory(Path.GetDirectoryName(expectedBinaryPath));
             File.WriteAllBytes(expectedBinaryPath, resource);
 
             return (expectedBinaryPath, true);

@@ -32,7 +32,7 @@ namespace Kontur.Lz4
             // NOTE: It's faster than BitConverter.ToUInt32 (suprised? me too)
             return
                 // ReSharper disable once RedundantCast
-                ((uint) buffer[offset]) |
+                (uint) buffer[offset] |
                 ((uint) buffer[offset + 1] << 8) |
                 ((uint) buffer[offset + 2] << 16) |
                 ((uint) buffer[offset + 3] << 24);

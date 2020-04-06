@@ -9,9 +9,9 @@ namespace Kontur.Lz4.Tests.Lz4NetCompatibility
     [TestFixture]
     public class CrossPlatformTests
     {
-        private static byte[] _originalBytes = Encoding.ASCII.GetBytes("abracadabracodabraabracadabracodaabracada bra");
+        private static readonly byte[] _originalBytes = Encoding.ASCII.GetBytes("abracadabracodabraabracadabracodaabracada bra");
 
-        private static byte[] _encodedOriginalWin64 =
+        private static readonly byte[] _encodedOriginalWin64 =
             Convert.FromBase64String("cWFicmFjYWQHABFvBwABCwAGEgADDwBQYSBicmE=");
 
 
