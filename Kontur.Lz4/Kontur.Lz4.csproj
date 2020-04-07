@@ -5,7 +5,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>Kontur.Lz4</AssemblyName>
     <RootNamespace>Kontur.Lz4</RootNamespace>
-    <Version>0.1.12</Version>
+    <Version>0.1.13</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Authors>Kontur, Andrey Ivanov, Milosz Krajewski</Authors>
@@ -24,14 +24,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="build\kontur_lz4_x64.dll" Link="kontur_lz4_x64.dll" />
-    <EmbeddedResource Include="build\kontur_lz4_x64.so" Link="kontur_lz4_x64.so" />
-    <EmbeddedResource Include="build\kontur_lz4_x86.dll" Link="kontur_lz4_x86.dll" />
-    <EmbeddedResource Include="build\kontur_lz4_x86.so" Link="kontur_lz4_x86.so" />
+    <EmbeddedResource Include="buildTransitive\kontur_lz4_x64.dll" Link="kontur_lz4_x64.dll" />
+    <EmbeddedResource Include="buildTransitive\kontur_lz4_x64.so" Link="kontur_lz4_x64.so" />
+    <EmbeddedResource Include="buildTransitive\kontur_lz4_x86.dll" Link="kontur_lz4_x86.dll" />
+    <EmbeddedResource Include="buildTransitive\kontur_lz4_x86.so" Link="kontur_lz4_x86.so" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="build\**\*" Pack="true" PackagePath="build\" />
+    <None Include="buildTransitive\**\*" Pack="true" PackagePath="buildTransitive\" />
   </ItemGroup>
 
 </Project>
