@@ -10,7 +10,7 @@ namespace Kontur.Lz4.Bindings
     {
         public static (string path, bool created) UnpackAssemblyFromResource(string library, string outputFile)
         {
-            var directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var directory = GetDirectoryName();
             var expectedBinaryPath = Path.Combine(directory, outputFile);
 
             var resourceName = $"{nameof(Kontur)}.{nameof(Lz4)}." + library;
@@ -23,6 +23,15 @@ namespace Kontur.Lz4.Bindings
             File.WriteAllBytes(expectedBinaryPath, resource);
 
             return (expectedBinaryPath, true);
+        }
+
+        private static string GetDirectoryName()
+        {
+            var location = Assembly.GetEntryAssembly()?.Location;
+            if (location != null)
+                return Path.GetDirectoryName(location);
+
+            return AppDomain.CurrentDomain.BaseDirectory;
         }
 
         private static byte[] GetResource(string resourceName)
