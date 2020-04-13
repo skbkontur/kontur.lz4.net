@@ -31,7 +31,9 @@ namespace Kontur.Lz4.Bindings
             if (location != null)
                 return Path.GetDirectoryName(location);
 
-            return AppDomain.CurrentDomain.BaseDirectory;
+            return !string.IsNullOrEmpty(AppDomain.CurrentDomain.RelativeSearchPath) 
+                ? AppDomain.CurrentDomain.RelativeSearchPath 
+                : AppDomain.CurrentDomain.BaseDirectory;
         }
 
         private static byte[] GetResource(string resourceName)
